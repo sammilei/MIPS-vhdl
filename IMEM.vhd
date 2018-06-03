@@ -22,29 +22,29 @@ entity imem is –– instruction memory
 
         -- outputs a 32-bit instruction
         instruction_out: out STD_LOGIC_VECTOR(31 downto 0));
-end;
+end imem;
 
 
 architecture behavior of imem is
 begin
-    process is
-        file mem_file: TEXT;
+    process
+        file instrMemFile: TEXT;
         variable L: line;
         variable ch: character;
         variable memIndex, lineNumber, chIndex, hexToInt: integer;
-        type ramtype is array (63 downto 0) of STD_LOGIC_VECTOR(31 downto 0);
-        variable mem: ramtype;
+        type memtype is array (63 downto 0) of STD_LOGIC_VECTOR(31 downto 0);
+        variable mem: memtype;
 
     begin 
-        –– first, initialize memory from file
+        –– first, we need to load the instructions from the file into the array
         for memIndex in 0 to 63 loop 
             mem(memIndex) := (others => '0');
         end loop;
 
         lineNumber := 0;
-        FILE_OPEN (mem_file, "memfile.dat", READ_MODE);
-        while not endfile(mem_file) loop
-            readline(mem_file, L);
+        FILE_OPEN (instrMemFile, "memfile.dat", READ_MODE);
+        while not endfile(instrMemFile) loop
+            readline(instrMemFile, L);
             hexToInt := 0;
             for chIndex in 1 to 8 loop
             -- build 32-bit STD_LOGIC_VECTOR 4 bits at a time for each hexadecimal
@@ -69,4 +69,4 @@ begin
             wait on address_in;
         end loop;
     end process;
-end;
+end behavior;
