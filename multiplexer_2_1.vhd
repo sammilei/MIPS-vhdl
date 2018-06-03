@@ -1,8 +1,10 @@
 -- .,.-'`'-.,.-'`'-.,.-'`'-.,.-'`'-.,.-'`'-.,.-'`'-.,.-'`'-.,.-'`'-.,.-'`'-.,.-'`'-
--- Module: 2 Input Multiplexer
--- Author: Allen Kim
+-- CS 525 (Sp 2018): MIPS Project
+-- Authors: Matt Dohlen, Allen Kim, Xianmei Lei
+-- 
+-- Module: mux2 - 2 input Multiplexer
 --
--- Takes 2 inputs and selects one to output based on selector signal.
+-- Takes 2 inputs and selects 1 to output.
 -- -'`'-.,.-'`'-.,.-'`'-.,.-'`'-.,.-'`'-.,.-'`'-.,.-'`'-.,.-'`'-.,.-'`'-.,.-'`'-.,.
 
 library IEEE;

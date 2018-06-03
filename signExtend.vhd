@@ -1,6 +1,8 @@
 -- .,.-'`'-.,.-'`'-.,.-'`'-.,.-'`'-.,.-'`'-.,.-'`'-.,.-'`'-.,.-'`'-.,.-'`'-.,.-'`'-
+-- CS 525 (Sp 2018): MIPS Project
+-- Authors: Matt Dohlen, Allen Kim, Xianmei Lei
+--
 -- Module: Sign Extension
--- Author: Allen Kim
 --
 -- Takes a 16-bit signed number and outputs the equivalent 32-bit signed number. 
 -- -'`'-.,.-'`'-.,.-'`'-.,.-'`'-.,.-'`'-.,.-'`'-.,.-'`'-.,.-'`'-.,.-'`'-.,.-'`'-.,.

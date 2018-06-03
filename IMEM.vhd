@@ -1,6 +1,8 @@
 -- .,.-'`'-.,.-'`'-.,.-'`'-.,.-'`'-.,.-'`'-.,.-'`'-.,.-'`'-.,.-'`'-.,.-'`'-.,.-'`'-
+-- CS 525 (Sp 2018): MIPS Project
+-- Authors: Matt Dohlen, Allen Kim, Xianmei Lei
+--
 -- Module: Instruction Memory
--- Author: Allen Kim
 -- 
 -- Instructions are stored in a text file "memfile.dat" in hexadecimal format,
 -- 1 instruction per line.

@@ -1,6 +1,8 @@
 -- .,.-'`'-.,.-'`'-.,.-'`'-.,.-'`'-.,.-'`'-.,.-'`'-.,.-'`'-.,.-'`'-.,.-'`'-.,.-'`'-
+-- CS 525 (Sp 2018): MIPS Project
+-- Authors: Matt Dohlen, Allen Kim, Xianmei Lei
+--
 -- Module: Data Memory
--- Author: Allen Kim
 --
 -- This module represents the Data Memory (MEM) as a 64 item array that
 -- holds 32-bit STD_LOGIC_VECTORs. 

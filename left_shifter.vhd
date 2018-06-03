@@ -1,9 +1,13 @@
 -- .,.-'`'-.,.-'`'-.,.-'`'-.,.-'`'-.,.-'`'-.,.-'`'-.,.-'`'-.,.-'`'-.,.-'`'-.,.-'`'-
+-- CS 525 (Sp 2018): MIPS Project
+-- Authors: Matt Dohlen, Allen Kim, Xianmei Lei
+-- 
 -- Module: Left Shifter
--- Author: Allen Kim
 --
--- Bit-shifts 2 bits to the left. (Same as multiply by 4)
+-- Bit-shifts 2 bits to the left. (Same as multiply by 4).
+-- This does not require an ALU because the shift is always the same 2 bits.
 -- -'`'-.,.-'`'-.,.-'`'-.,.-'`'-.,.-'`'-.,.-'`'-.,.-'`'-.,.-'`'-.,.-'`'-.,.-'`'-.,.
+
 
 library IEEE;
 use IEEE.STD_LOGIC_1164.all;

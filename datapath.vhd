@@ -4,7 +4,8 @@
 -- 
 -- Module: datapath
 --
--- Combines 
+-- Combines other modules to form the datapath used by all instructions.
+-- Declares modules as components and instantiates these to form the datapath.
 -- -'`'-.,.-'`'-.,.-'`'-.,.-'`'-.,.-'`'-.,.-'`'-.,.-'`'-.,.-'`'-.,.-'`'-.,.-'`'-.,.
 
 library IEEE; 
