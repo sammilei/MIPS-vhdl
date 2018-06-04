@@ -109,14 +109,14 @@ architecture structural of datapath is
         y         : out STD_LOGIC_VECTOR(width-1 downto 0));
   end component;
 
-  entity dmem is -- data memory
-  port (
-    clk          : in STD_LOGIC;
-    writeEnabled : in STD_LOGIC;
-    memAddress   : in STD_LOGIC_VECTOR (31 downto 0);
-    writeData    : in STD_LOGIC_VECTOR (31 downto 0);
-    readData     : out STD_LOGIC_VECTOR (31 downto 0));
-end;
+  component dmem is -- data memory
+    port (
+      clk          : in STD_LOGIC;
+      writeEnabled : in STD_LOGIC;
+      memAddress   : in STD_LOGIC_VECTOR (31 downto 0);
+      writeData    : in STD_LOGIC_VECTOR (31 downto 0);
+      readData     : out STD_LOGIC_VECTOR (31 downto 0));
+  end component;
 
 ------------------------------------------------------------------
 ------- Intermediate registers -----------------------------------
@@ -261,7 +261,7 @@ begin
   -- IF/ID
   IF_ID_reg : IF_ID_register
     port map(PCplus4, instrFromMem, clk, opcodeFromIFID, rsFromIFID, 
-      rsFromIFID, rdFromIFID, immFromIFID, PCFromIFID);
+      rtFromIFID, rdFromIFID, immFromIFID, PCFromIFID);
 
     
   -- ID logic
@@ -307,13 +307,13 @@ begin
   -- NOTE: doesn't use M_MemRead
   dataMem : dmem
     port map(clk, M_MemWrite, ALUResultFromEXMEM, writeDataFromEXMEM, 
-      readDataFromDMEM)
+      readDataFromDMEM);
 
   -- MEM/WB
   MEM_WB_reg : MEM_WB_register
     port map(ALUResultFromEXMEM, readDataFromDMEM, regToWriteFromEXMEM,
       clk, WBFromEXMEM, ALUResultFromMEMWB, memDataFromMEMWB, regToWriteFromMEMWB,
-      WB_RegWrite, WB_MemtoReg)
+      WB_RegWrite, WB_MemtoReg);
 
   -- WB logic
   regDataToWriteMux : mux2 generic map(32)
