@@ -1,6 +1,6 @@
 -- .,.-'`'-.,.-'`'-.,.-'`'-.,.-'`'-.,.-'`'-.,.-'`'-.,.-'`'-.,.-'`'-.,.-'`'-.,.-'`'-
 -- CS 525 (Sp 2018): MIPS Project
--- Authors: Matt Dohlen, Allen Kim, Xianmei Lei
+-- Authors: Matt Dohlen, Allen Kim, XianmeiÂ Lei
 -- 
 -- Module: ALU
 --
@@ -19,7 +19,8 @@ entity ALU is
     A, B : in STD_LOGIC_VECTOR(31 downto 0);                      -- operands
     ALU_control_input : in STD_LOGIC_VECTOR (3 downto 0);	  -- operation (4-bit ALUControl)
     ALU_Out : out STD_LOGIC_VECTOR(31 downto 0);                  -- 32-bit result of ALU operation
-    CarryOut: out std_logic);					  -- carryout Flag					  -- Flag for branching
+    CarryOut: out std_logic;					  -- carryout Flag
+    ZERO: out std_logic);			                  -- Flag for branching
 
 end ALU;
  
@@ -39,8 +40,14 @@ case ALU_control_input is
 	else ALU_Out <="00000000000000000000000000000000";
 	end if;
   when others => ALU_Out <= "00000000000000000000000000000000";
-
 end case; 
+
+  if A = B then
+	ZERO <= '1';
+  else
+	ZERO <= '0';
+  end if;
+
 end process; 
 
 temp <= ('0' & A) + ('0' & B);
