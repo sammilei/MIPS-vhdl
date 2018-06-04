@@ -286,6 +286,8 @@ begin
     port map(rtValFromIDEX, immFromIDEX, EX_ALUSrc, ALUSrcMuxOut);
   alu : ALU
     port map(rsValFromIDEX, ALUSrcMuxOut, ALUControlOut, ALUResult, ALUCarry, ALUZero);
+  
+  -- TODO: instantiate ALU_ctl instead? ALUControl is a port.
   aluCtrl : ALUControl
     port map(immFromIDEX(5 downto 0), EX_ALUOp, ALUControlOut);
   immShiftLeft : sl2
