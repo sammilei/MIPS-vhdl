@@ -38,21 +38,21 @@ elsif opcode = "100011" then
 
 -- sw
 elsif opcode = "101011" then
-    EX <= "x001";
+    EX <= "-001";
     M <= "001";
-    WB <= "0x";
+    WB <= "0-";
 
 -- beq
-elsif opcode = "101011" then
-    EX <= "x010";
+elsif opcode = "000100" then
+    EX <= "-010";
     M <= "100";
-    WB <= "0x";
+    WB <= "0-";
 
 -- j
-elsif opcode "101011" then
-    EX <= "xxxx";
+elsif opcode = "000010" then
+    EX <= "----";
     M <= "100";
-    WB <= "0x";
+    WB <= "0-";
  
 -- currently undefined   
 else
