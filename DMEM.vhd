@@ -13,7 +13,7 @@ use IEEE.STD_LOGIC_1164.all; use STD.TEXTIO.all;
 use IEEE.NUMERIC_STD_UNSIGNED.all;
 
 
-entity dmem is –– data memory
+entity dmem is -- data memory
   port (
     clk          : in STD_LOGIC;
     writeEnabled : in STD_LOGIC;
@@ -29,7 +29,7 @@ begin
     type memtype is array (63 downto 0) of STD_LOGIC_VECTOR(31 downto 0);
     variable mem: memtype;
   begin
-    –– read or write memory
+    -- read or write memory
     loop
       if rising_edge(clk) then
         if (writeEnabled = '1') then 

@@ -4,10 +4,10 @@ use IEEE.NUMERIC_STD.ALL;
 
 entity control is
     port (
-        opcode, funct     : in std_logic_vector(5 downto 0);
-        EX                : out std_logic_vector(3 downto 0);
-        M                 : out std_logic_vector(2 downto 0);
-        WB                : out std_logic_vector(1 downto 0));
+        opcode     : in std_logic_vector(5 downto 0);
+        EX         : out std_logic_vector(3 downto 0);
+        M          : out std_logic_vector(2 downto 0);
+        WB         : out std_logic_vector(1 downto 0));
 end control;
 
 architecture behavior of control is
@@ -35,7 +35,7 @@ elsif opcode = "101011" then
     EX <= "x010";
     M <= "100";
     WB <= "0x";
-
+, 
 -- j
 elsif opcode "101011" then
     EX <= "xxxx";

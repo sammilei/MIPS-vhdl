@@ -17,7 +17,7 @@ use IEEE.STD_LOGIC_1164.all; use STD.TEXTIO.all;
 use IEEE.NUMERIC_STD_UNSIGNED.all;
 
 
-entity imem is –– instruction memory
+entity imem is -- instruction memory
     port (
         -- receives address from PC
         address_in: in STD_LOGIC_VECTOR(5 downto 0);
@@ -38,7 +38,7 @@ begin
         variable mem: memtype;
 
     begin 
-        –– first, we need to load the instructions from the file into the array
+        -- first, we need to load the instructions from the file into the array
         for memIndex in 0 to 63 loop 
             mem(memIndex) := (others => '0');
         end loop;
@@ -65,7 +65,7 @@ begin
             lineNumber := lineNumber + 1;
         end loop;
 
-        –– fetch instruction at address_in
+        -- fetch instruction at address_in
         loop
             instruction_out <= mem(to_integer(address_in));
             wait on address_in;
