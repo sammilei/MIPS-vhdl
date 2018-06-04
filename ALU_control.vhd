@@ -3,9 +3,10 @@
 -- Authors: Matt Dohlen, Allen Kim, Xianmei Lei
 -- 
 -- Module: ALU control unit
---ALU control unit for detect the ALU_op and function 
---for ALU to do the certain operation by yeidling 
---ALU_control_input for passing to ALU
+--
+-- ALU control unit for detect the ALU_op and function 
+-- for ALU to do the certain operation by yielding 
+-- ALU_control_input for passing to ALU
 -- -'`'-.,.-'`'-.,.-'`'-.,.-'`'-.,.-'`'-.,.-'`'-.,.-'`'-.,.-'`'-.,.-'`'-.,.-'`'-.,.
 
 library IEEE;

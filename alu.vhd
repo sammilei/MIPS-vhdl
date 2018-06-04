@@ -4,7 +4,7 @@
 -- 
 -- Module: ALU
 --
--- AlU For MIPS for 6 basic operations
+-- ALU For MIPS for 6 basic operations
 -- performing arithmetic operation: +, -
 -- performing logical operation: and, or, set on less than
 -- -'`'-.,.-'`'-.,.-'`'-.,.-'`'-.,.-'`'-.,.-'`'-.,.-'`'-.,.-'`'-.,.-'`'-.,.-'`'-.,.

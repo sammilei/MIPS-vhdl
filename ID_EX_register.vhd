@@ -1,3 +1,12 @@
+-- .,.-'`'-.,.-'`'-.,.-'`'-.,.-'`'-.,.-'`'-.,.-'`'-.,.-'`'-.,.-'`'-.,.-'`'-.,.-'`'-
+-- CS 525 (Sp 2018): MIPS Project
+-- Authors: Matt Dohlen, Allen Kim, Xianmei Lei
+-- 
+-- Module: ID_EX_register
+--
+-- Pipeline register located between the IDecode and Execute pipe stages.
+-- -'`'-.,.-'`'-.,.-'`'-.,.-'`'-.,.-'`'-.,.-'`'-.,.-'`'-.,.-'`'-.,.-'`'-.,.-'`'-.,.
+
 library IEEE;
 use IEEE.STD_LOGIC_1164.ALL;
 use IEEE.NUMERIC_STD.ALL;

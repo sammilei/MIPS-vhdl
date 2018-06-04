@@ -4,8 +4,8 @@
 -- 
 -- Module: datapath
 --
--- Combines other modules to form the datapath used by all instructions.
--- Declares modules as components and instantiates these to form the datapath.
+-- Combines other modules with pipeline registers to form the pipelined datapath 
+-- used by all instructions. Connects the components to each other with signals.
 -- -'`'-.,.-'`'-.,.-'`'-.,.-'`'-.,.-'`'-.,.-'`'-.,.-'`'-.,.-'`'-.,.-'`'-.,.-'`'-.,.
 
 library IEEE; 
@@ -13,7 +13,7 @@ use IEEE.STD_LOGIC_1164.all;
 use IEEE.STD_LOGIC_ARITH.all;
 
 
-entity datapath is -- MIPS datapath
+entity datapath is -- pipelined MIPS datapath
   port (
     clk, reset        : in STD_LOGIC;
     memtoreg, PCsrc   : in STD_LOGIC;
@@ -293,7 +293,7 @@ begin
   PCBranchAdd : adder
     port map(PCFromIDEX, immShift, branchAddr);
   regDstMux : mux2 generic map(5)
-    port map(rsFromIDEX, rdFromIDEX, EX_RegDst, regDestMuxOut)
+    port map(rsFromIDEX, rdFromIDEX, EX_RegDst, regDestMuxOut);
 
   -- EX/MEM
   EX_MEM_reg : EX_MEM_register

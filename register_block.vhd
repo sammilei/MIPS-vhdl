@@ -4,7 +4,8 @@
 -- 
 -- Module: register_block
 --
--- 32-element register file. 
+-- 32-element register file. On rising edge, sets outputs to the values that
+-- are in rs and rt and writes data to rd, if signaled to.
 -- -'`'-.,.-'`'-.,.-'`'-.,.-'`'-.,.-'`'-.,.-'`'-.,.-'`'-.,.-'`'-.,.-'`'-.,.-'`'-.,.
 
 library IEEE;

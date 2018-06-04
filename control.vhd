@@ -1,3 +1,15 @@
+-- .,.-'`'-.,.-'`'-.,.-'`'-.,.-'`'-.,.-'`'-.,.-'`'-.,.-'`'-.,.-'`'-.,.-'`'-.,.-'`'-
+-- CS 525 (Sp 2018): MIPS Project
+-- Authors: Matt Dohlen, Allen Kim, Xianmei Lei
+-- 
+-- Module: pipeline controller
+--
+-- Depending on opcode, sends control signals for the EX, M, and WB stages 
+-- to ID_EX_register. From there, the control signals are passed (with the
+-- corresponding instruction execution) and partially consumed at each stage
+-- of the datapath.
+-- -'`'-.,.-'`'-.,.-'`'-.,.-'`'-.,.-'`'-.,.-'`'-.,.-'`'-.,.-'`'-.,.-'`'-.,.-'`'-.,.
+
 library IEEE;
 use IEEE.STD_LOGIC_1164.ALL;
 use IEEE.NUMERIC_STD.ALL;
@@ -35,7 +47,7 @@ elsif opcode = "101011" then
     EX <= "x010";
     M <= "100";
     WB <= "0x";
-, 
+
 -- j
 elsif opcode "101011" then
     EX <= "xxxx";
