@@ -2,7 +2,7 @@ library IEEE;
 use IEEE.STD_LOGIC_1164.ALL;
 use IEEE.NUMERIC_STD.ALL;
 
-entity ID_EX_interface is
+entity ID_EX_register is
     port (
         PC             : in std_logic_vector(31 downto 0);
         rs_val, rt_val : in std_logic_vector(31 downto 0);
@@ -13,7 +13,7 @@ entity ID_EX_interface is
         
         EX                : in std_logic_vector(3 downto 0);
         M                 : in std_logic_vector(2 downto 0);
-        WB                : in std_logic_vector(1 downto 0));
+        WB                : in std_logic_vector(1 downto 0);
 
 	    PC_out                 : out std_logic_vector(31 downto 0);
 	    rs_val_out, rt_val_out : out std_logic_vector(31 downto 0);
@@ -24,9 +24,9 @@ entity ID_EX_interface is
         EX_ALUOp              : out std_logic_vector(1 downto 2);
         M_out                 : out std_logic_vector(2 downto 0);
         WB_out                : out std_logic_vector(1 downto 0));
-end ID_EX_interface;
+end ID_EX_register;
 
-architecture behavior of ID_EX_interface is
+architecture behavior of ID_EX_register is
 begin
     process(clk)
     begin

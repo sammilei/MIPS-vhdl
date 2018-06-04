@@ -2,94 +2,51 @@ library IEEE;
 use IEEE.STD_LOGIC_1164.ALL;
 use IEEE.NUMERIC_STD.ALL;
 
-entity ID_EX_interface is
+entity control is
     port (
         opcode, funct     : in std_logic_vector(5 downto 0);
-        EX_RegDst, EX_ALUSrc : out std_logic;
-        EX_ALUOp : out std_logic_vector(1 downto 2);
-        M_Branch, M_MemRead, M_MemWrite : out std_logic;
-        WB_RegWrite, WB_MemtoReg: out std_logic);
-end ID_EX_interface;
+        EX                : out std_logic_vector(3 downto 0);
+        M                 : out std_logic_vector(2 downto 0);
+        WB                : out std_logic_vector(1 downto 0));
+end control;
 
-architecture behavior of ID_EX_interface is
+architecture behavior of control is
 begin
 -- rtype
 if opcode = "000000" then
-    EX_RegDst <= '1';
-    EX_ALUOp <= "10";
-    EX_ALUSrc <= '0';
-
-    M_Branch <= '0';
-    M_MemRead <= '0';
-    M_MemWrite <= '0';
-
-    WB_RegWrite <= '1';
-    WB_MemtoReg <= '0';
+    EX <= "1100";
+    M <= "000";
+    WB <= "10";
 
 -- lw
 elsif opcode = "100011" then
-    EX_RegDst <= '0';
-    EX_ALUOp <= "00";
-    EX_ALUSrc <= '1';
-
-    M_Branch <= '0';
-    M_MemRead <= '1';
-    M_MemWrite <= '0';
-
-    WB_RegWrite <= '1';
-    WB_MemtoReg <= '1';
+    EX <= "0001";
+    M <= "010";
+    WB <= "11";
 
 -- sw
 elsif opcode = "101011" then
-    EX_RegDst <= 'x';
-    EX_ALUOp <= "00";
-    EX_ALUSrc <= '1';
-
-    M_Branch <= '0';
-    M_MemRead <= '0';
-    M_MemWrite <= '1';
-
-    WB_RegWrite <= '0';
-    WB_MemtoReg <= 'x';
+    EX <= "x001";
+    M <= "001";
+    WB <= "0x";
 
 -- beq
 elsif opcode = "101011" then
-    EX_RegDst <= 'x';
-    EX_ALUOp <= "01";
-    EX_ALUSrc <= '0';
-
-    M_Branch <= '1';
-    M_MemRead <= '0';
-    M_MemWrite <= '0';
-
-    WB_RegWrite <= '0';
-    WB_MemtoReg <= 'x';
+    EX <= "x010";
+    M <= "100";
+    WB <= "0x";
 
 -- j
 elsif opcode "101011" then
-    EX_RegDst <= 'x';
-    EX_ALUOp <= "11";
-    EX_ALUSrc <= 'x';
-
-    M_Branch <= '1';
-    M_MemRead <= '0';
-    M_MemWrite <= '0';
-
-    WB_RegWrite <= '0';
-    WB_MemtoReg <= 'x';
+    EX <= "xxxx";
+    M <= "100";
+    WB <= "0x";
  
 -- currently undefined   
 else
-    EX_RegDst <= 'x';
-    EX_ALUOp <= "xx";
-    EX_ALUSrc <= 'x';
-
-    M_Branch <= 'x';
-    M_MemRead <= 'x';
-    M_MemWrite <= 'x';
-
-    WB_RegWrite <= 'x';
-    WB_MemtoReg <= 'x';
+    EX <= "xxxx";
+    M <= "xxx";
+    WB <= "xx";
 
 end if; 
 end behavior;
