@@ -1,15 +1,3 @@
--- .,.-'`'-.,.-'`'-.,.-'`'-.,.-'`'-.,.-'`'-.,.-'`'-.,.-'`'-.,.-'`'-.,.-'`'-.,.-'`'-
--- CS 525 (Sp 2018): MIPS Project
--- Authors: Matt Dohlen, Allen Kim, Xianmei Lei
--- 
--- Module: pipeline controller
---
--- Depending on opcode, sends control signals for the EX, M, and WB stages 
--- to ID_EX_register. From there, the control signals are passed (with the
--- corresponding instruction execution) and partially consumed at each stage
--- of the datapath.
--- -'`'-.,.-'`'-.,.-'`'-.,.-'`'-.,.-'`'-.,.-'`'-.,.-'`'-.,.-'`'-.,.-'`'-.,.-'`'-.,.
-
 library IEEE;
 use IEEE.STD_LOGIC_1164.ALL;
 use IEEE.NUMERIC_STD.ALL;
@@ -17,6 +5,7 @@ use IEEE.NUMERIC_STD.ALL;
 entity control is
     port (
         opcode     : in std_logic_vector(5 downto 0);
+	reset 	   : in std_logic;
         EX         : out std_logic_vector(3 downto 0);
         M          : out std_logic_vector(2 downto 0);
         WB         : out std_logic_vector(1 downto 0));
@@ -24,8 +13,14 @@ end control;
 
 architecture behavior of control is
 begin
+process (reset, opcode)
+begin
+if reset = '1' then
+    EX <= "0000";
+    M <= "000";
+    WB <= "00";
 -- rtype
-if opcode = "000000" then
+elsif opcode = "000000" then
     EX <= "1100";
     M <= "000";
     WB <= "10";
@@ -56,9 +51,10 @@ elsif opcode = "000010" then
  
 -- currently undefined   
 else
-    EX <= "xxxx";
-    M <= "xxx";
-    WB <= "xx";
+    EX <= "XXXX";
+    M <= "XXX";
+    WB <= "XX";
 
 end if; 
+end process;
 end behavior;

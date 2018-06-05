@@ -22,5 +22,5 @@ end mux2;
 
 architecture behavior of mux2 is
 begin
-    y <= d1 when selector else d0;
+    y <= d1 when selector = '1' else d0;
 end behavior;

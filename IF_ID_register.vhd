@@ -14,13 +14,11 @@ use IEEE.NUMERIC_STD.ALL;
 
 entity IF_ID_register is
 	port (
-	    PC                 : in std_logic_vector(31 downto 0);
-	    r_type_instruction : in std_logic_vector(31 downto 0);
-	    clk                : in std_logic;
-	    opcode			: out std_logic_vector(5 downto 0);
-	    rs, rt, rd 		: out std_logic_vector(4 downto 0);
-	    imm 			: out std_logic_vector(15 downto 0);
-	    PC_out            : out std_logic_vector(31 downto 0));
+	    PC    : in std_logic_vector(31 downto 0);
+	    instr : in std_logic_vector(31 downto 0);
+	    clk   : in std_logic;
+	    instr_out	: out std_logic_vector(31 downto 0);
+	    PC_out      : out std_logic_vector(31 downto 0));
 end IF_ID_register;
 
  
@@ -31,11 +29,7 @@ begin
 	begin
         if rising_edge(clk) then
         	PC_out <= PC;
-        	opcode <= r_type_instruction(31 downto 26);
-        	rs <= r_type_instruction(25 downto 21);
-        	rt <= r_type_instruction(20 downto 16);
-        	rd <= r_type_instruction(15 downto 11);
-        	imm <= r_type_instruction(15 downto 0);
+        	instr_out <= instr;
         end if;
 	end process;
 end behavior;

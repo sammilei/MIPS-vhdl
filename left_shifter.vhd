@@ -13,7 +13,7 @@ library IEEE;
 use IEEE.STD_LOGIC_1164.all;
 
 
-entity sl2 is –– shift left by 2
+entity sl2 is -- shift left by 2
 port (
     signExtendedInput: in STD_LOGIC_VECTOR(31 downto 0);
     shiftedOut: out STD_LOGIC_VECTOR(31 downto 0));

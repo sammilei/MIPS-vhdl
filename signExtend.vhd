@@ -20,5 +20,5 @@ end signext;
 
 architecture behavior of signext is
 begin
-    signedOut <= X"ffff" & signedIn when signedIn(15) else X"0000" & signedIn;
+    signedOut <= X"ffff" & signedIn when signedIn(15)='1' else X"0000" & signedIn;
 end behavior;
