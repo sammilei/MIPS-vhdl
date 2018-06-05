@@ -16,7 +16,6 @@ use ieee.NUMERIC_STD.ALL;-- for shift
  
 entity ALU_ctl is
  Port (
- clk          : in STD_LOGIC; 
  funct 	      : in STD_LOGIC_VECTOR (5 downto 0);
  ALU_op       : in STD_LOGIC_VECTOR(1 downto 0);
  ALU_control_input: out STD_LOGIC_VECTOR(3 downto 0)
@@ -35,7 +34,6 @@ begin
 
 process(funct)
 begin
-if rising_edge(clk) then
 	case ALU_op is
 	  when "00" => ALU_control_input <= ADD;       -- LW/SW 
 	  when "01" => ALU_control_input <= SUB;       -- BEQ
@@ -54,6 +52,5 @@ if rising_edge(clk) then
 	  
   	when others => NULL;
 end case; 
-end if;
 end process; 
 end Behavioral;
