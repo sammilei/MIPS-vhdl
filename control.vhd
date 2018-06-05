@@ -48,7 +48,13 @@ elsif opcode = "000010" then
     EX <= "----";
     M <= "100";
     WB <= "0-";
- 
+
+-- reset instruction
+elsif opcode = "111111" then
+    EX <= "0000";
+    M <= "000";
+    WB <= "00";
+
 -- currently undefined   
 else
     EX <= "XXXX";

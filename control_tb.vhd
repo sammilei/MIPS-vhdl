@@ -96,11 +96,19 @@ begin
         wait for 100 ns;
 
 	-- undefined
-	opcode <= "111111";
+	opcode <= "100000";
 	wait for 2 ns;
 	assert EX = "XXXX";
 	assert M = "XXX";
 	assert WB = "XX";
+        wait for 100 ns;
+
+	-- instruction that has been reset
+	opcode <= "111111";
+	wait for 2 ns;
+	assert EX = "0000";
+	assert M = "000";
+	assert WB = "00";
         wait for 100 ns;
 	
 
