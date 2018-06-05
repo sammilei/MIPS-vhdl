@@ -5,6 +5,7 @@ use IEEE.NUMERIC_STD.ALL;
 entity control is
     port (
         opcode     : in std_logic_vector(5 downto 0);
+	reset 	   : in std_logic;
         EX         : out std_logic_vector(3 downto 0);
         M          : out std_logic_vector(2 downto 0);
         WB         : out std_logic_vector(1 downto 0));
@@ -12,8 +13,14 @@ end control;
 
 architecture behavior of control is
 begin
+process (reset, opcode)
+begin
+if reset = '1' then
+    EX <= "0000";
+    M <= "000";
+    WB <= "00";
 -- rtype
-if opcode = "000000" then
+elsif opcode = "000000" then
     EX <= "1100";
     M <= "000";
     WB <= "10";
@@ -26,27 +33,28 @@ elsif opcode = "100011" then
 
 -- sw
 elsif opcode = "101011" then
-    EX <= "x001";
+    EX <= "-001";
     M <= "001";
-    WB <= "0x";
+    WB <= "0-";
 
 -- beq
-elsif opcode = "101011" then
-    EX <= "x010";
+elsif opcode = "000100" then
+    EX <= "-010";
     M <= "100";
-    WB <= "0x";
-, 
+    WB <= "0-";
+
 -- j
-elsif opcode "101011" then
-    EX <= "xxxx";
+elsif opcode = "000010" then
+    EX <= "----";
     M <= "100";
-    WB <= "0x";
+    WB <= "0-";
  
 -- currently undefined   
 else
-    EX <= "xxxx";
-    M <= "xxx";
-    WB <= "xx";
+    EX <= "XXXX";
+    M <= "XXX";
+    WB <= "XX";
 
 end if; 
+end process;
 end behavior;
