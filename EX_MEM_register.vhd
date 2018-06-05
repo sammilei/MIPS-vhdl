@@ -9,6 +9,7 @@ entity EX_MEM_register is
         ALU_result     : in std_logic_vector(31 downto 0);
         write_data     : in std_logic_vector(31 downto 0);
         reg_to_write   : in std_logic_vector(4 downto 0);
+        reset          : in std_logic;
 	    clk            : in std_logic;
 
         M                 : in std_logic_vector(2 downto 0);
@@ -28,7 +29,12 @@ architecture behavior of EX_MEM_register is
 begin
     process(clk)
     begin
-        if rising_edge(clk) then
+        if reset = '1' then
+            M_Branch <= '0';
+            M_MemRead <= '0';
+            M_MemWrite <= '0';
+            WB_out <= "00";
+        elsif rising_edge(clk) then
             branch_addr_out <= branch_addr;
             zero_out <= zero;
             ALU_result_out <= ALU_result;

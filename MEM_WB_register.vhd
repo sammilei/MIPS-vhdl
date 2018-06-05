@@ -16,6 +16,7 @@ entity MEM_WB_register is
         reg_data       : in std_logic_vector(31 downto 0);
         mem_data       : in std_logic_vector(31 downto 0);
         reg_to_write   : in std_logic_vector(4 downto 0);
+        reset          : in std_logic;
 	    clk            : in std_logic;
 
         WB                : in std_logic_vector(1 downto 0);
@@ -31,7 +32,9 @@ architecture behavior of MEM_WB_register is
 begin
     process(clk)
     begin
-        if rising_edge(clk) then
+        if reset = '1' then
+            WB_RegWrite <= '0';
+        elsif rising_edge(clk) then
             reg_data_out <= reg_data;
             mem_data_out <= mem_data;
             reg_to_write_out <= reg_to_write;

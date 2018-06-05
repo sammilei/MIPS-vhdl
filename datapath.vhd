@@ -124,15 +124,14 @@ architecture struct of datapath is
 ------------------------------------------------------------------
 
   component IF_ID_register is
-    port (
-      PC                 : in std_logic_vector(31 downto 0);
-      r_type_instruction : in std_logic_vector(31 downto 0);
-      clk                : in std_logic;
-      opcode            : out std_logic_vector(5 downto 0);
-      rs, rt, rd        : out std_logic_vector(4 downto 0);
-      imm               : out std_logic_vector(15 downto 0);
-      PC_out            : out std_logic_vector(31 downto 0));
-  end component;
+  port (
+      PC    : in std_logic_vector(31 downto 0);
+      instr : in std_logic_vector(31 downto 0);
+      reset : in std_logic;
+      clk   : in std_logic;
+      instr_out : out std_logic_vector(31 downto 0);
+      PC_out      : out std_logic_vector(31 downto 0));
+end component;
 
   component ID_EX_register is
     port (
@@ -205,9 +204,7 @@ architecture struct of datapath is
   signal instrFromMem: std_logic_vector(31 downto 0);
 
   -- ID wires
-  signal opcodeFromIFID: std_logic_vector(5 downto 0);
-  signal rsFromIFID, rtFromIFID, rdFromIFID: std_logic_vector(4 downto 0);
-  signal immFromIFID: std_logic_vector(15 downto 0);
+  signal instrFromIFID: std_logic_vector(31 downto 0);
   signal PCFromIFID: std_logic_vector(31 downto 0);
   signal rsValFromReg, rtValFromReg: std_logic_vector(31 downto 0);
   signal immSignExt: std_logic_vector(31 downto 0);
@@ -261,26 +258,30 @@ begin
 
   -- IF/ID
   IF_ID_reg : IF_ID_register
-    port map(PCplus4, instrFromMem, clk, opcodeFromIFID, rsFromIFID, 
-      rtFromIFID, rdFromIFID, immFromIFID, PCFromIFID);
+    port map(PCplus4, instrFromMem, reset, clk, instrFromMem, PCFromIFID);
 
+  -- instruction layout
+  -- opcode 31 - 26, rs 25 - 21, rt 20-16, rd 15 - 11, shamt 10 to 6
+  -- funct 5 - 0, imm 15 - 0, address 15 - 0
     
   -- ID logic
   regBlock: register_block
-    port map(regToWriteFromMEMWB, rsFromIFID, rtFromIFID, regDataToWrite,
-      clk, WB_RegWrite, rsValFromReg, rtValFromReg);
+    port map(regToWriteFromMEMWB, instrFromIFID(25 downto 21), 
+      instrFromIFID(20 downto 16), regDataToWrite, clk, WB_RegWrite, 
+      rsValFromReg, rtValFromReg);
   ctrl : control
-    port map(opcodeFromIFID, EXFromCtrl, MFromCtrl, WBFromCtrl);
+    port map(instrFromIFID(31 downto 26), EXFromCtrl, MFromCtrl, WBFromCtrl);
   se: signext
-    port map(immFromIFID, immSignExt);
+    port map(instrFromIFID(15 downto 0), immSignExt);
 
   
   -- ID/EX
   ID_EX_reg : ID_EX_register
     port map(PCFromIFID, rsValFromReg, rtValFromReg, immSignExt,
-      rsFromIFID, rdFromIFID, clk, EXFromCtrl, MFromCtrl, WBFromCtrl,
-      PCFromIDEX, rsValFromIDEX, rtValFromIDEX, immFromIDEX, rsFromIDEX,
-      rdFromIDEX, EX_RegDst, EX_ALUSrc, EX_ALUOp, MFromIDEX, WBFromIDEX);
+      instrFromIFID(20 downto 16), instrFromIFID(15 downto 11), reset, clk, 
+      EXFromCtrl, MFromCtrl, WBFromCtrl, PCFromIDEX, rsValFromIDEX, 
+      rtValFromIDEX, immFromIDEX, rsFromIDEX, rdFromIDEX, EX_RegDst, 
+      EX_ALUSrc, EX_ALUOp, MFromIDEX, WBFromIDEX);
 
   -- EX logic
   aluSrcMux : mux2 generic map(32)
@@ -300,7 +301,7 @@ begin
 
   -- EX/MEM
   EX_MEM_reg : EX_MEM_register
-    port map(branchAddr, ALUZero, ALUResult, rtValFromIDEX, regDestMuxOut,
+    port map(branchAddr, ALUZero, ALUResult, rtValFromIDEX, regDestMuxOut, reset,
       clk, MFromIDEX, WBFromIDEX, PCBranch, zeroFromEXMEM, ALUResultFromEXMEM, 
       writeDataFromEXMEM, regToWriteFromEXMEM, M_Branch, M_MemRead,
       M_MemWrite, WBFromEXMEM);
@@ -314,7 +315,7 @@ begin
 
   -- MEM/WB
   MEM_WB_reg : MEM_WB_register
-    port map(ALUResultFromEXMEM, readDataFromDMEM, regToWriteFromEXMEM,
+    port map(ALUResultFromEXMEM, readDataFromDMEM, regToWriteFromEXMEM, reset,
       clk, WBFromEXMEM, ALUResultFromMEMWB, memDataFromMEMWB, regToWriteFromMEMWB,
       WB_RegWrite, WB_MemtoReg);
 

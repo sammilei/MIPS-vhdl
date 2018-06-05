@@ -17,6 +17,7 @@ entity ID_EX_register is
         rs_val, rt_val : in std_logic_vector(31 downto 0);
         imm            : in std_logic_vector(31 downto 0);
 	    rs, rd         : in std_logic_vector(4 downto 0);
+        reset          : in std_logic;
 	    clk            : in std_logic;
 
         
@@ -39,7 +40,10 @@ architecture behavior of ID_EX_register is
 begin
     process(clk)
     begin
-        if rising_edge(clk) then
+        if reset = '1' then
+            M_out <= "000";
+            WB_out <= "00";
+        elsif rising_edge(clk) then
             PC_out <= PC;
             rt_val_out <= rt_val;
             rs_val_out <= rs_val;
