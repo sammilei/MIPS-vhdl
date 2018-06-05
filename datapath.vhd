@@ -28,7 +28,7 @@ entity datapath is -- pipelined MIPS datapath
 end datapath;
 
 
-architecture structural of datapath is
+architecture struct of datapath is
 
   component imem is -- instruction memory
     port (
@@ -193,7 +193,7 @@ architecture structural of datapath is
       mem_data_out     : out std_logic_vector(31 downto 0);
       reg_to_write_out   : out std_logic_vector(4 downto 0);
 
-      WB_RegWrite, WB_MemtoReg : out std_logic_vector(1 downto 0));
+      WB_RegWrite, WB_MemtoReg : out std_logic);
   end component;
 
 ------------------------------------------------------------------
@@ -257,7 +257,7 @@ begin
   PCadd1: adder 
     port map(PC, X"00000004", PCplus4);
   instrMem : imem
-    port map(PC, instrFromMem);
+    port map(PC(5 downto 0), instrFromMem);
 
   -- IF/ID
   IF_ID_reg : IF_ID_register
@@ -322,4 +322,4 @@ begin
   regDataToWriteMux : mux2 generic map(32)
     port map(ALUResultFromMEMWB, memDataFromMEMWB, WB_MemtoReg, regDataToWrite);
 
-end structural;
+end struct;
