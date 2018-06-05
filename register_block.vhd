@@ -30,8 +30,16 @@ begin
 	process(clk)
 	begin
 		if rising_edge(clk) then
-			rs_out <= regs(to_integer(unsigned(rs)));
-			rt_out <= regs(to_integer(unsigned(rt)));
+			if rs = "00000" then
+				rs_out <= (others => '0');
+			else
+				rs_out <= regs(to_integer(unsigned(rs)));
+			end if;
+			if rt = "00000" then
+				rt_out <= (others => '0');
+			else 
+				rt_out <= regs(to_integer(unsigned(rt)));
+			end if;
 
 		-- NOTE: for pipelined processor, perform write on the FALLING EDGE of clk
 		elsif (write_enable = '1') then
