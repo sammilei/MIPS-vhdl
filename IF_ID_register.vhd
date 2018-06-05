@@ -15,7 +15,7 @@ use IEEE.NUMERIC_STD.ALL;
 entity IF_ID_register is
 	port (
 	    PC    : in std_logic_vector(31 downto 0);
-	    instr : inout std_logic_vector(31 downto 0);
+	    instr : in std_logic_vector(31 downto 0);
 	    reset : in std_logic;
 	    clk   : in std_logic;
 	    instr_out	: out std_logic_vector(31 downto 0);
@@ -26,14 +26,13 @@ end IF_ID_register;
 
 architecture behavior of IF_ID_register is
 begin
-	process(clk)
+	process(clk, reset)
 	begin
-    if rising_edge(clk) then
-		  if reset = '1' then
-			  instr(31 downto 26) <= "111111";
-		  end if;
-      PC_out <= PC;
-      instr_out <= instr;
+	if reset = '1' then
+		instr_out(31 downto 26) <= "111111";
+	elsif rising_edge(clk) then
+	PC_out <= PC;
+	instr_out <= instr;
 	end if;
  	end process;
 end behavior;
