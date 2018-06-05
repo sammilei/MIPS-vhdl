@@ -12,7 +12,7 @@ use IEEE.STD_LOGIC_1164.all;
 use IEEE.NUMERIC_STD_UNSIGNED.all;
 
 
-entity adder is –– adder
+entity adder is -- adder
     port (
         a: in STD_LOGIC_VECTOR(31 downto 0);
         b: in STD_LOGIC_VECTOR(31 downto 0);

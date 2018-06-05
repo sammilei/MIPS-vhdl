@@ -4,7 +4,8 @@
 -- 
 -- Module: register_block
 --
--- 32-element register file. 
+-- 32-element register file. On rising edge, sets outputs to the values that
+-- are in rs and rt and writes data to rd, if signaled to.
 -- -'`'-.,.-'`'-.,.-'`'-.,.-'`'-.,.-'`'-.,.-'`'-.,.-'`'-.,.-'`'-.,.-'`'-.,.-'`'-.,.
 
 library IEEE;
@@ -32,10 +33,10 @@ begin
 			rs_out <= regs(to_integer(unsigned(rs)));
 			rt_out <= regs(to_integer(unsigned(rt)));
 
-			-- NOTE: for pipelined processor, perform write on the FALLING EDGE of clk
-			if (write_enable = '1') then
-				regs(to_integer(unsigned(rd))) <= write_data;
-			end if;
-		end if;			
+		-- NOTE: for pipelined processor, perform write on the FALLING EDGE of clk
+		elsif (write_enable = '1') then
+			regs(to_integer(unsigned(rd))) <= write_data;
+		end if;
+					
 	end process;
 end behavior;

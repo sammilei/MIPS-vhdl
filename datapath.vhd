@@ -4,8 +4,8 @@
 -- 
 -- Module: datapath
 --
--- Combines other modules to form the datapath used by all instructions.
--- Declares modules as components and instantiates these to form the datapath.
+-- Combines other modules with pipeline registers to form the pipelined datapath 
+-- used by all instructions. Connects the components to each other with signals.
 -- -'`'-.,.-'`'-.,.-'`'-.,.-'`'-.,.-'`'-.,.-'`'-.,.-'`'-.,.-'`'-.,.-'`'-.,.-'`'-.,.
 
 library IEEE; 
@@ -13,18 +13,18 @@ use IEEE.STD_LOGIC_1164.all;
 use IEEE.STD_LOGIC_ARITH.all;
 
 
-entity datapath is -- MIPS datapath
-  port (
-    clk, reset        : in STD_LOGIC;
-    memtoreg, PCsrc   : in STD_LOGIC;
-    ALUsrc, regdst    : in STD_LOGIC;
-    regwrite, jump    : in STD_LOGIC;
-    ALUControl        : in STD_LOGIC_VECTOR(2 downto 0);
-    zero              : out STD_LOGIC;
-    PC                : buffer STD_LOGIC_VECTOR(31 downto 0);
-    instr             : in STD_LOGIC_VECTOR(31 downto 0);
-    ALUOut, writedata : buffer STD_LOGIC_VECTOR(31 downto 0);
-    readdata          : in STD_LOGIC_VECTOR(31 downto 0));
+entity datapath is -- pipelined MIPS datapath
+   port (
+     clk, reset        : in STD_LOGIC;
+     memtoreg, PC_src   : in STD_LOGIC;
+     ALUsrc, regdst    : in STD_LOGIC;
+     regwrite, jump    : in STD_LOGIC;
+     ALUControl        : in STD_LOGIC_VECTOR(2 downto 0);
+     zero              : out STD_LOGIC;
+     PC                : buffer STD_LOGIC_VECTOR(31 downto 0);
+     instr             : in STD_LOGIC_VECTOR(31 downto 0);
+     ALUOut, writedata : buffer STD_LOGIC_VECTOR(31 downto 0);
+     readdata          : in STD_LOGIC_VECTOR(31 downto 0));
 end datapath;
 
 
@@ -109,14 +109,14 @@ architecture structural of datapath is
         y         : out STD_LOGIC_VECTOR(width-1 downto 0));
   end component;
 
-  entity dmem is -- data memory
-  port (
-    clk          : in STD_LOGIC;
-    writeEnabled : in STD_LOGIC;
-    memAddress   : in STD_LOGIC_VECTOR (31 downto 0);
-    writeData    : in STD_LOGIC_VECTOR (31 downto 0);
-    readData     : out STD_LOGIC_VECTOR (31 downto 0));
-end;
+  component dmem is -- data memory
+    port (
+      clk          : in STD_LOGIC;
+      writeEnabled : in STD_LOGIC;
+      memAddress   : in STD_LOGIC_VECTOR (31 downto 0);
+      writeData    : in STD_LOGIC_VECTOR (31 downto 0);
+      readData     : out STD_LOGIC_VECTOR (31 downto 0));
+  end component;
 
 ------------------------------------------------------------------
 ------- Intermediate registers -----------------------------------
@@ -152,7 +152,7 @@ end;
       rs_out, rd_out         : out std_logic_vector(4 downto 0);
 
       EX_RegDst, EX_ALUSrc  : out std_logic;
-      EX_ALUOp              : out std_logic_vector(1 downto 2);
+      EX_ALUOp              : out std_logic_vector(1 downto 0);
       M_out                 : out std_logic_vector(2 downto 0);
       WB_out                : out std_logic_vector(1 downto 0));
   end component;
@@ -261,7 +261,7 @@ begin
   -- IF/ID
   IF_ID_reg : IF_ID_register
     port map(PCplus4, instrFromMem, clk, opcodeFromIFID, rsFromIFID, 
-      rsFromIFID, rdFromIFID, immFromIFID, PCFromIFID);
+      rtFromIFID, rdFromIFID, immFromIFID, PCFromIFID);
 
     
   -- ID logic
@@ -286,6 +286,8 @@ begin
     port map(rtValFromIDEX, immFromIDEX, EX_ALUSrc, ALUSrcMuxOut);
   alu : ALU
     port map(rsValFromIDEX, ALUSrcMuxOut, ALUControlOut, ALUResult, ALUCarry, ALUZero);
+  
+  -- TODO: instantiate ALU_ctl instead? ALUControl is a port.
   aluCtrl : ALUControl
     port map(immFromIDEX(5 downto 0), EX_ALUOp, ALUControlOut);
   immShiftLeft : sl2
@@ -293,7 +295,7 @@ begin
   PCBranchAdd : adder
     port map(PCFromIDEX, immShift, branchAddr);
   regDstMux : mux2 generic map(5)
-    port map(rsFromIDEX, rdFromIDEX, EX_RegDst, regDestMuxOut)
+    port map(rsFromIDEX, rdFromIDEX, EX_RegDst, regDestMuxOut);
 
   -- EX/MEM
   EX_MEM_reg : EX_MEM_register
@@ -307,13 +309,13 @@ begin
   -- NOTE: doesn't use M_MemRead
   dataMem : dmem
     port map(clk, M_MemWrite, ALUResultFromEXMEM, writeDataFromEXMEM, 
-      readDataFromDMEM)
+      readDataFromDMEM);
 
   -- MEM/WB
   MEM_WB_reg : MEM_WB_register
     port map(ALUResultFromEXMEM, readDataFromDMEM, regToWriteFromEXMEM,
       clk, WBFromEXMEM, ALUResultFromMEMWB, memDataFromMEMWB, regToWriteFromMEMWB,
-      WB_RegWrite, WB_MemtoReg)
+      WB_RegWrite, WB_MemtoReg);
 
   -- WB logic
   regDataToWriteMux : mux2 generic map(32)
