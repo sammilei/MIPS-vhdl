@@ -57,12 +57,13 @@ architecture structural of datapath is
   end component;
 
   component ALU is
-    port (
-      A, B : in STD_LOGIC_VECTOR(31 downto 0);                      -- operands
-      ALU_control_input : in STD_LOGIC_VECTOR (3 downto 0);   -- operation (4-bit ALUControl)
-      ALU_Out : out STD_LOGIC_VECTOR(31 downto 0);                  -- 32-bit result of ALU operation
-      CarryOut: out std_logic;            -- carryout Flag
-      ZERO: out std_logic);                       -- Flag for branching
+    Port (
+      clk          : in STD_LOGIC;
+      A, B         : in STD_LOGIC_VECTOR(31 downto 0);              -- operands
+      ALU_control_input : in STD_LOGIC_VECTOR (3 downto 0);	  -- operation (4-bit ALUControl)
+      ALU_Out      : out STD_LOGIC_VECTOR(31 downto 0);             -- 32-bit result of ALU operation
+      CarryOut     : out std_logic;			          -- carryout Flag
+      ZERO         : out std_logic);			          -- Flag for branching
   end component;
 
   component ALU_ctl is
@@ -220,7 +221,7 @@ architecture structural of datapath is
   signal immFromIDEX: std_logic_vector(31 downto 0);
   signal rsFromIDEX, rdFromIDEX: std_logic_vector(4 downto 0);
   signal EX_RegDst, EX_ALUSrc: std_logic;
-  signal EX_ALUOp: std_logic_vector(1 downto 2);
+  signal EX_ALUOp: std_logic_vector(1 downto 0);
   signal MFromIDEX: std_logic_vector(2 downto 0);
   signal WBFromIDEX: std_logic_vector(1 downto 0);
   signal ALUSrcMuxOut: std_logic_vector(31 downto 0);
@@ -284,11 +285,11 @@ begin
   -- EX logic
   aluSrcMux : mux2 generic map(32)
     port map(rtValFromIDEX, immFromIDEX, EX_ALUSrc, ALUSrcMuxOut);
-  alu : ALU
-    port map(rsValFromIDEX, ALUSrcMuxOut, ALUControlOut, ALUResult, ALUCarry, ALUZero);
+  EX_ALU : ALU
+    port map(clk, rsValFromIDEX, ALUSrcMuxOut, ALUControlOut, ALUResult, ALUCarry, ALUZero);
   
   -- TODO: instantiate ALU_ctl instead? ALUControl is a port.
-  aluCtrl : ALUControl
+  aluCtrl : ALU_ctl
     port map(immFromIDEX(5 downto 0), EX_ALUOp, ALUControlOut);
   immShiftLeft : sl2
     port map(immFromIDEX, immShift);
@@ -300,12 +301,12 @@ begin
   -- EX/MEM
   EX_MEM_reg : EX_MEM_register
     port map(branchAddr, ALUZero, ALUResult, rtValFromIDEX, regDestMuxOut,
-      clk, MFromIDEX, WBFromIDEX, PCBranch, ALUResultFromEXMEM, 
+      clk, MFromIDEX, WBFromIDEX, PCBranch, zeroFromEXMEM, ALUResultFromEXMEM, 
       writeDataFromEXMEM, regToWriteFromEXMEM, M_Branch, M_MemRead,
       M_MemWrite, WBFromEXMEM);
 
   -- MEM logic
-  PCSrc <= M_Branch & zeroFromEXMEM;
+  PCSrc <= M_Branch AND zeroFromEXMEM;
   -- NOTE: doesn't use M_MemRead
   dataMem : dmem
     port map(clk, M_MemWrite, ALUResultFromEXMEM, writeDataFromEXMEM, 
