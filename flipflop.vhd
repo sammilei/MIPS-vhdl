@@ -24,7 +24,7 @@ architecture asynchronous of flopr is
 begin
     process(clk, reset) 
     begin
-        if reset then q <= (others => '0');
+        if reset='1' then q <= (others => '0');
         elsif rising_edge(clk) then
             q <= d;
         end if;
