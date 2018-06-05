@@ -21,7 +21,7 @@ entity imem is -- instruction memory
     port (
         reset: in STD_LOGIC;
         -- receives address from PC
-        address_in: in STD_LOGIC_VECTOR(5 downto 0);
+        address_in: in STD_LOGIC_VECTOR(31 downto 0);
         -- outputs a 32-bit instruction
         instruction_out: out STD_LOGIC_VECTOR(31 downto 0));
 end imem;
@@ -74,7 +74,7 @@ begin
 
         -- fetch instruction at address_in
         loop
-            instruction_out <= mem(to_integer(address_in));
+            instruction_out <= mem(to_integer(address_in(7 downto 2)));
             wait on address_in;
         end loop;
     end process;

@@ -29,7 +29,14 @@ architecture behavior of dmem is
 begin
   process
     type memtype is array (63 downto 0) of STD_LOGIC_VECTOR(31 downto 0);
-    variable mem: memtype;
+    variable mem: memtype := (
+	    0 => X"00000000",
+            1 => X"00000001",
+            2 => X"00000002",
+            3 => X"00000003",
+            4 => X"00000004",
+            5 => X"00000005",
+	others => (others => '0'));
     variable memIndex: integer;
   begin
     -- read or write memory
@@ -43,11 +50,11 @@ begin
         if (writeEnabled = '1') then 
           -- memAddress(7 downto 2) == memAddress/4
           -- We use this because mem is indexed by word, not bytes
-          mem (to_integer(memAddress(7 downto 2))) := writeData;
+          mem (to_integer(memAddress(5 downto 0))) := writeData;
         end if;
       end if;
       if (readEnabled = '1') then
-        readData <= mem (to_integer(memAddress(7 downto 2)));
+        readData <= mem (to_integer(memAddress(5 downto 0)));
       end if;
       wait on clk, reset, memAddress;
     end loop;
