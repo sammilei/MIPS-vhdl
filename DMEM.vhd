@@ -49,7 +49,7 @@ begin
       if (readEnabled = '1') then
         readData <= mem (to_integer(memAddress(7 downto 2)));
       end if;
-      wait on clk, memAddress;
+      wait on clk, reset, memAddress;
     end loop;
   end process;
 end behavior;

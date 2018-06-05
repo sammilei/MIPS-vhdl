@@ -19,9 +19,9 @@ use IEEE.NUMERIC_STD_UNSIGNED.all;
 
 entity imem is -- instruction memory
     port (
+        reset: in STD_LOGIC;
         -- receives address from PC
         address_in: in STD_LOGIC_VECTOR(5 downto 0);
-
         -- outputs a 32-bit instruction
         instruction_out: out STD_LOGIC_VECTOR(31 downto 0));
 end imem;
@@ -35,35 +35,42 @@ begin
         variable ch: character;
         variable memIndex, lineNumber, chIndex, hexToInt: integer;
         type memtype is array (63 downto 0) of STD_LOGIC_VECTOR(31 downto 0);
-        variable mem: memtype;
+        variable mem: memtype := (
+            0 => "10001100000000100000000000000000",
+            1 => "10001100000000110000000000000001",
+            2 => "00000000010000110000100000100000",
+            3 => "10101100000000010000000000000011",
+            4 => "00010000001000101111111111111111",
+            5 => "00010000001000011111111111111111",
+            others => (others => '0'));
 
     begin 
         -- first, we need to load the instructions from the file into the array
-        for memIndex in 0 to 63 loop 
-            mem(memIndex) := (others => '0');
-        end loop;
+        -- for memIndex in 0 to 63 loop 
+        --     mem(memIndex) := (others => '0');
+        -- end loop;
 
-        lineNumber := 0;
-        FILE_OPEN (instrMemFile, "memfile.dat", READ_MODE);
-        while not endfile(instrMemFile) loop
-            readline(instrMemFile, L);
-            hexToInt := 0;
-            for chIndex in 1 to 8 loop
-            -- build 32-bit STD_LOGIC_VECTOR 4 bits at a time for each hexadecimal
-                read (L, ch);
-                -- find integer value of each hexadecimal, convert to STD_LOGIC_VECTOR(4)
-                if '0' <= ch and ch <= '9' then
-                    hexToInt := character'pos(ch) - character'pos('0');
-                elsif 'a' <= ch and ch <= 'f' then
-                    hexToInt := character'pos(ch) - character'pos('a') + 10;
-                elsif 'A' <= ch and ch <= 'F' then
-                    hexToInt := character'pos(ch) - character'pos('A') + 10;
-                else report "Instruction Memory - Format error (invalid character) on line" & integer'image(lineNumber) severity error;
-                end if;
-                mem(lineNumber)(35 - chIndex * 4 downto 32 - chIndex * 4) := to_std_logic_vector(hexToInt, 4);
-            end loop;
-            lineNumber := lineNumber + 1;
-        end loop;
+        -- lineNumber := 0;
+        -- FILE_OPEN (instrMemFile, "memfile.dat", READ_MODE);
+        -- while not endfile(instrMemFile) loop
+        --     readline(instrMemFile, L);
+        --     hexToInt := 0;
+        --     for chIndex in 1 to 8 loop
+        --     -- build 32-bit STD_LOGIC_VECTOR 4 bits at a time for each hexadecimal
+        --         read (L, ch);
+        --         -- find integer value of each hexadecimal, convert to STD_LOGIC_VECTOR(4)
+        --         if '0' <= ch and ch <= '9' then
+        --             hexToInt := character'pos(ch) - character'pos('0');
+        --         elsif 'a' <= ch and ch <= 'f' then
+        --             hexToInt := character'pos(ch) - character'pos('a') + 10;
+        --         elsif 'A' <= ch and ch <= 'F' then
+        --             hexToInt := character'pos(ch) - character'pos('A') + 10;
+        --         else report "Instruction Memory - Format error (invalid character) on line" & integer'image(lineNumber) severity error;
+        --         end if;
+        --         mem(lineNumber)(35 - chIndex * 4 downto 32 - chIndex * 4) := to_std_logic_vector(hexToInt, 4);
+        --     end loop;
+        --     lineNumber := lineNumber + 1;
+        -- end loop;
 
         -- fetch instruction at address_in
         loop

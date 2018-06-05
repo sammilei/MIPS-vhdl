@@ -113,6 +113,8 @@ architecture struct of datapath is
   component dmem is -- data memory
     port (
       clk          : in STD_LOGIC;
+      reset        : in STD_LOGIC;
+      readEnabled  : in STD_LOGIC;
       writeEnabled : in STD_LOGIC;
       memAddress   : in STD_LOGIC_VECTOR (31 downto 0);
       writeData    : in STD_LOGIC_VECTOR (31 downto 0);
@@ -139,6 +141,7 @@ end component;
       rs_val, rt_val : in std_logic_vector(31 downto 0);
       imm            : in std_logic_vector(31 downto 0);
       rs, rd         : in std_logic_vector(4 downto 0);
+      reset          : in std_logic;
       clk            : in std_logic;
 
         
@@ -164,6 +167,7 @@ end component;
       ALU_result     : in std_logic_vector(31 downto 0);
       write_data     : in std_logic_vector(31 downto 0);
       reg_to_write   : in std_logic_vector(4 downto 0);
+      reset          : in std_logic;
       clk            : in std_logic;
 
       M                 : in std_logic_vector(2 downto 0);
@@ -184,6 +188,7 @@ end component;
       reg_data       : in std_logic_vector(31 downto 0);
       mem_data       : in std_logic_vector(31 downto 0);
       reg_to_write   : in std_logic_vector(4 downto 0);
+      reset          : in std_logic;
       clk            : in std_logic;
 
       WB                : in std_logic_vector(1 downto 0);
@@ -289,7 +294,6 @@ begin
   EX_ALU : ALU
     port map(clk, rsValFromIDEX, ALUSrcMuxOut, ALUControlOut, ALUResult, ALUCarry, ALUZero);
   
-  -- TODO: instantiate ALU_ctl instead? ALUControl is a port.
   aluCtrl : ALU_ctl
     port map(immFromIDEX(5 downto 0), EX_ALUOp, ALUControlOut);
   immShiftLeft : sl2
@@ -308,9 +312,9 @@ begin
 
   -- MEM logic
   PCSrc <= M_Branch AND zeroFromEXMEM;
-  -- NOTE: doesn't use M_MemRead
+  
   dataMem : dmem
-    port map(clk, M_MemWrite, ALUResultFromEXMEM, writeDataFromEXMEM, 
+    port map(clk, reset, M_MemRead, M_MemWrite, ALUResultFromEXMEM, writeDataFromEXMEM, 
       readDataFromDMEM);
 
   -- MEM/WB
