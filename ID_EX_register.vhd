@@ -30,7 +30,7 @@ entity ID_EX_register is
 	    rs_out, rd_out         : out std_logic_vector(4 downto 0);
 
         EX_RegDst, EX_ALUSrc  : out std_logic;
-        EX_ALUOp              : out std_logic_vector(1 downto 2);
+        EX_ALUOp              : out std_logic_vector(1 downto 0);
         M_out                 : out std_logic_vector(2 downto 0);
         WB_out                : out std_logic_vector(1 downto 0));
 end ID_EX_register;

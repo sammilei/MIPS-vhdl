@@ -34,9 +34,9 @@ begin
             ALU_result_out <= ALU_result;
             write_data_out <= write_data;
             reg_to_write_out <= reg_to_write;
-            M_Branch = M(2);
-            M_MemRead = M(1);
-            M_MemWrite = M(0);
+            M_Branch <= M(2);
+            M_MemRead <= M(1);
+            M_MemWrite <= M(0);
             WB_out <= WB;
         end if;
     end process;

@@ -16,6 +16,7 @@ entity IF_ID_register is
 	port (
 	    PC    : in std_logic_vector(31 downto 0);
 	    instr : in std_logic_vector(31 downto 0);
+	    reset : in std_logic;
 	    clk   : in std_logic;
 	    instr_out	: out std_logic_vector(31 downto 0);
 	    PC_out      : out std_logic_vector(31 downto 0));
@@ -28,8 +29,12 @@ begin
 	process(clk)
 	begin
         if rising_edge(clk) then
-        	PC_out <= PC;
-        	instr_out <= instr;
+		if reset then
+			instr(31 downto 26) <= "1111111";
+		else
+        		PC_out <= PC;
+        		instr_out <= instr;
+		end if;
         end if;
 	end process;
 end behavior;

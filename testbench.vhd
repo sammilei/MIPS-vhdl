@@ -19,10 +19,10 @@ architecture test of testbench is
   signal clk, reset, memwrite: STD_LOGIC;
 
 begin
-  –– instantiate device under test
+  -- instantiate device under test
   dut: top port map(clk, reset, writedata, dataAddress, memwrite);
   
-  –– Generate clock with 10 ns period
+  -- Generate clock with 10 ns period
   process 
     begin
       clk <= '1';
@@ -31,7 +31,7 @@ begin
       wait for 5 ns;
   end process;
   
-  –– Generate reset for first two clock cycles
+  -- Generate reset for first two clock cycles
   process 
     begin
       reset <= '1';
@@ -40,7 +40,7 @@ begin
       wait;
   end process;
   
-  –– check that 7 gets written to address 84 at end of program
+  -- check that 7 gets written to address 84 at end of program
   -- test code goes here
   process(clk) 
     begin
