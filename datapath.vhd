@@ -34,7 +34,7 @@ architecture struct of datapath is
     port (
         reset: in STD_LOGIC;
         -- receives address from PC
-        address_in: in STD_LOGIC_VECTOR(5 downto 0);
+        address_in: in STD_LOGIC_VECTOR(31 downto 0);
         -- outputs a 32-bit instruction
         instruction_out: out STD_LOGIC_VECTOR(31 downto 0));
 end component;
@@ -282,7 +282,7 @@ end process;
   PCadd1: adder 
     port map(PCFromFlop, X"00000004", PCplus4);
   instrMem : imem
-    port map(reset, PCFromFlop(5 downto 0), instrFromMem);
+    port map(reset, PCFromFlop, instrFromMem);
 
   -- IF/ID
   IF_ID_reg : IF_ID_register
