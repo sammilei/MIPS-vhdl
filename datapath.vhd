@@ -14,17 +14,17 @@ use IEEE.STD_LOGIC_ARITH.all;
 
 
 entity datapath is -- pipelined MIPS datapath
-  port (
-    clk, reset        : in STD_LOGIC;
-    memtoreg, PCsrc   : in STD_LOGIC;
-    ALUsrc, regdst    : in STD_LOGIC;
-    regwrite, jump    : in STD_LOGIC;
-    ALUControl        : in STD_LOGIC_VECTOR(2 downto 0);
-    zero              : out STD_LOGIC;
-    PC                : buffer STD_LOGIC_VECTOR(31 downto 0);
-    instr             : in STD_LOGIC_VECTOR(31 downto 0);
-    ALUOut, writedata : buffer STD_LOGIC_VECTOR(31 downto 0);
-    readdata          : in STD_LOGIC_VECTOR(31 downto 0));
+   port (
+     clk, reset        : in STD_LOGIC;
+     memtoreg, PC_src   : in STD_LOGIC;
+     ALUsrc, regdst    : in STD_LOGIC;
+     regwrite, jump    : in STD_LOGIC;
+     ALUControl        : in STD_LOGIC_VECTOR(2 downto 0);
+     zero              : out STD_LOGIC;
+     PC                : buffer STD_LOGIC_VECTOR(31 downto 0);
+     instr             : in STD_LOGIC_VECTOR(31 downto 0);
+     ALUOut, writedata : buffer STD_LOGIC_VECTOR(31 downto 0);
+     readdata          : in STD_LOGIC_VECTOR(31 downto 0));
 end datapath;
 
 
@@ -152,7 +152,7 @@ architecture structural of datapath is
       rs_out, rd_out         : out std_logic_vector(4 downto 0);
 
       EX_RegDst, EX_ALUSrc  : out std_logic;
-      EX_ALUOp              : out std_logic_vector(1 downto 2);
+      EX_ALUOp              : out std_logic_vector(1 downto 0);
       M_out                 : out std_logic_vector(2 downto 0);
       WB_out                : out std_logic_vector(1 downto 0));
   end component;
