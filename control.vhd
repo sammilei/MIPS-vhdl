@@ -63,9 +63,9 @@ elsif opcode = "001111" then
 
 -- currently undefined   
 else
-    EX <= "XXXX";
-    M <= "XXX";
-    WB <= "XX";
+    EX <= "0000";
+    M <= "000";
+    WB <= "00";
 
 end if; 
 end process;
