@@ -16,15 +16,15 @@ use IEEE.STD_LOGIC_ARITH.all;
 entity datapath is -- pipelined MIPS datapath
    port (
      clk, reset        : in STD_LOGIC;
-     memtoreg, PC_src   : in STD_LOGIC;
-     ALUsrc, regdst    : in STD_LOGIC;
-     regwrite, jump    : in STD_LOGIC;
-     ALUControl        : in STD_LOGIC_VECTOR(2 downto 0);
      zero              : out STD_LOGIC;
-     PC                : buffer STD_LOGIC_VECTOR(31 downto 0);
-     instr             : in STD_LOGIC_VECTOR(31 downto 0);
-     ALUOut, writedata : buffer STD_LOGIC_VECTOR(31 downto 0);
-     readdata          : in STD_LOGIC_VECTOR(31 downto 0));
+     instr             : out std_logic_vector(31 downto 0);
+     rs_val, rt_val    : out std_logic_vector(31 downto 0);
+     branch_addr       : out std_logic_vector(31 downto 0);
+     PC                : out STD_LOGIC_VECTOR(31 downto 0);
+     ALUOut, writedata : out STD_LOGIC_VECTOR(31 downto 0);
+     dmem_read         : out std_logic_vector(31 downto 0);
+     reg_to_write      : out std_logic_vector(4 downto 0);
+     ctrl_signals      : out std_logic_vector(8 downto 0));
 end datapath;
 
 
@@ -139,6 +139,7 @@ end component;
       rs_val, rt_val : in std_logic_vector(31 downto 0);
       imm            : in std_logic_vector(31 downto 0);
       rs, rd         : in std_logic_vector(4 downto 0);
+      reset	     : in std_logic;
       clk            : in std_logic;
 
         
@@ -164,6 +165,7 @@ end component;
       ALU_result     : in std_logic_vector(31 downto 0);
       write_data     : in std_logic_vector(31 downto 0);
       reg_to_write   : in std_logic_vector(4 downto 0);
+      reset	     : in std_logic;
       clk            : in std_logic;
 
       M                 : in std_logic_vector(2 downto 0);
@@ -184,6 +186,7 @@ end component;
       reg_data       : in std_logic_vector(31 downto 0);
       mem_data       : in std_logic_vector(31 downto 0);
       reg_to_write   : in std_logic_vector(4 downto 0);
+      reset	     : in std_logic;
       clk            : in std_logic;
 
       WB                : in std_logic_vector(1 downto 0);
@@ -201,6 +204,7 @@ end component;
   
   -- IF Wires
   signal PCNext, PCNextBr, PCPlus4, PCBranch: STD_LOGIC_VECTOR(31 downto 0);
+  signal PCFromFlop: std_logic_vector(31 downto 0);
   signal instrFromMem: std_logic_vector(31 downto 0);
 
   -- ID wires
@@ -246,15 +250,37 @@ end component;
   signal WB_RegWrite, WB_MemtoReg: std_logic;
 
 begin
-  -- IF logic
+process(clk, reset)
+begin
+  instr <= instrFromMem;
+  rs_val <= rsValFromReg;
+  rt_val <= rtValFromReg;
+  branch_addr <= PCBranch;
+  PC <= PCFromFlop;
+  ALUOut <= ALUResult;
+  writedata <= regDataToWrite;
+  dmem_read <= readDataFromDMEM;
+  reg_to_write <= regToWriteFromMEMWB;
+  ctrl_signals(8 downto 5) <= EXFromCtrl;
+  ctrl_signals(4 downto 2) <= MFromCtrl;
+  ctrl_signals(1 downto 0) <= WBFromCtrl;
+
+  
+
+  if reset = '1' then
+    PCNext <= (others => '0');
+  end if;
+end process;
+
+-- IF logic
   PCSrcMux: mux2 generic map(32) 
     port map(PCPlus4, PCBranch, PCSrc, PCNext);
   PCreg: flopr generic map(32) 
-    port map(clk, reset, PCnext, PC);
+    port map(clk, reset, PCnext, PCFromFlop);
   PCadd1: adder 
-    port map(PC, X"00000004", PCplus4);
+    port map(PCFromFlop, X"00000004", PCplus4);
   instrMem : imem
-    port map(PC(5 downto 0), instrFromMem);
+    port map(PCFromFlop(5 downto 0), instrFromMem);
 
   -- IF/ID
   IF_ID_reg : IF_ID_register
@@ -322,5 +348,4 @@ begin
   -- WB logic
   regDataToWriteMux : mux2 generic map(32)
     port map(ALUResultFromMEMWB, memDataFromMEMWB, WB_MemtoReg, regDataToWrite);
-
 end struct;

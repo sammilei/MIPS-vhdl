@@ -30,7 +30,7 @@ begin
 	begin
         if rising_edge(clk) then
 		if reset = '1' then
-			instr(31 downto 26) <= "1111111";
+			instr_out(31 downto 26) <= "111111";
 		else
         		PC_out <= PC;
         		instr_out <= instr;
