@@ -55,6 +55,12 @@ elsif opcode = "111111" then
     M <= "000";
     WB <= "00";
 
+-- li
+elsif opcode = "001111" then
+    EX <= "0001";
+    M <= "000";
+    WB <= "10";
+
 -- currently undefined   
 else
     EX <= "XXXX";
