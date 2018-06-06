@@ -14,7 +14,7 @@
 
 library IEEE;
 use IEEE.STD_LOGIC_1164.all; use STD.TEXTIO.all;
-use IEEE.NUMERIC_STD_UNSIGNED.all;
+use IEEE.NUMERIC_STD.all;
 
 
 entity imem is -- instruction memory
@@ -28,14 +28,9 @@ end imem;
 
 
 architecture behavior of imem is
-begin
-    process
-        file instrMemFile: TEXT;
-        variable L: line;
-        variable ch: character;
-        variable memIndex, lineNumber, chIndex, hexToInt: integer;
-        type memtype is array (63 downto 0) of STD_LOGIC_VECTOR(31 downto 0);
-        variable mem: memtype := (
+--signal memIndex, lineNumber, chIndex, hexToInt: natural;
+        type memtype is array (0 to 63) of STD_LOGIC_VECTOR(31 downto 0);
+        signal mem: memtype := (
             0 => "10001100000000100000000000000000",
             1 => "10001100000000110000000000000001",
             2 => "00000000010000110000100000100000",
@@ -44,6 +39,12 @@ begin
             5 => "00010000001000011111111111111111",
             others => (others => '0'));
 
+begin
+    process
+--        file instrMemFile: TEXT;
+--        variable L: line;
+--        variable ch: character;
+--        variable 
     begin 
         -- first, we need to load the instructions from the file into the array
         -- for memIndex in 0 to 63 loop 
@@ -74,7 +75,7 @@ begin
 
         -- fetch instruction at address_in
         loop
-            instruction_out <= mem(to_integer(address_in(7 downto 2)));
+            instruction_out <= mem(to_integer(unsigned(address_in(7 downto 2))));
             wait on address_in;
         end loop;
     end process;
