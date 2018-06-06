@@ -1,6 +1,6 @@
 -- .,.-'`'-.,.-'`'-.,.-'`'-.,.-'`'-.,.-'`'-.,.-'`'-.,.-'`'-.,.-'`'-.,.-'`'-.,.-'`'-
 -- CS 525 (Sp 2018): MIPS Project
--- Authors: Matt Dohlen, Allen Kim, Xianmei Lei
+-- Authors: Matt Dohlen, Allen Kim, Xianmei Lei
 -- 
 -- Module: datapath
 --
@@ -16,6 +16,7 @@ use IEEE.STD_LOGIC_ARITH.all;
 entity datapath is -- pipelined MIPS datapath
    port (
      clk, reset        : in STD_LOGIC;
+     --tb_instr     : in std_logic_vector (31 downto 0);
      zero              : out STD_LOGIC;
      instr             : out std_logic_vector(31 downto 0);
      rs_val, rt_val    : out std_logic_vector(31 downto 0);
